@@ -10,22 +10,24 @@ function usage()
 function commands(){
         while true
         do
-        date
+        #date
         
 
         #ps -eo pid,ppid,cmd,%mem --sort=-%mem |head -n 10
-	c1=$(ps -eo %mem --sort=-%mem | awk 'NR==2 {print "max mem usage:"$1"%"}')
+	#c1=$(ps -eo %mem --sort=-%mem | awk 'NR==2 {print "max mem usage:"$1"%"}')
+	c1=$(free -g | grep Mem | awk '{print "free mem:" $4}')
         
         #df -h 
-	c2=$(df -h --output=size --total | awk 'END {print "total space:" $1}')
-        
+	#c2=$(df -h --output=size --total | awk 'END {print "total space:" $4}')
+       	c2=$(df -h / | awk 'END {print "available space:" $2}') 
         #uptime
-	c3=$(uptime |tr -d \, |awk '{print "1m 5m 15m load avarage:"$8,$9,$10}')
+	c3=$(uptime |awk '{print "15m load avarage:"$10}')
 	
 	#c4=$(ps -aux |grep "defunct" |wc -l)
-	c4=$(ps -aux|grep -v grep|grep "defunct" |awk '{print "pid of zombieS:" $2}')
+	c4=$(ps -aux|grep -v grep|grep "defunct"|wc -l|awk '{print "zombieS:" $1}')
 
-	echo $c1,$c2,$c3,$c4
+
+	echo $(date),$c1,$c2,$c3,$c4
       echo "________-_______________________________________________________________________________________"
 
         sleep 10s
@@ -35,6 +37,11 @@ function commands(){
 while getopts f:s param ; do
 case $param in
 	f)
+	if ! [ -x "$(command -v bmon)" ]; then
+  echo 'Error: bmon is not installed.' >&2
+  exit 1
+fi
+
         echo "press ctrl c to terminate the execution"
 
 	 #commands 2>&1 1> $FILE/$2
@@ -42,6 +49,11 @@ case $param in
 
 	;;
 	s)
+	if ! [ -x "$(command -v bmon)" ]; then
+  	 echo 'Error: bmon is not installed.' >&2
+         exit 1
+ 	fi
+
 	 commands
 	;;
 	*)
