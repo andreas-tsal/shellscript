@@ -19,7 +19,7 @@ function commands(){
         
         #df -h 
 	#c2=$(df -h --output=size --total | awk 'END {print "total space:" $4}')
-       	c2=$(df -h / | awk 'END {print "available space:" $2}') 
+       	c2=$(df -h / | awk 'END {print "available space:" $4}') 
         #uptime
 	c3=$(uptime |awk '{print "15m load avarage:"$10}')
 	
@@ -28,22 +28,21 @@ function commands(){
 
 	c5=$(vnstat | grep today | awk '{print "rx:" $2$3 " tx:" $5$6}')
 
-
-	echo $(date),$c1,$c2,$c3,$c4,$c5
-      echo "_________________________________________________________________________________________________________________________"
+	echo $(date +"%b %d %H:%M:%S"): $c1,$c2,$c3,$c4,$c5
 
         sleep 10s
         done
 }
 
+if ! [ -x "$(command -v vnstat)" ]; then
+   echo 'Error: vnstat is not installed: sudo apt install vnstat' >&2
+   exit 1
+fi
+
+
 while getopts f:s param ; do
 case $param in
 	f)
-	if ! [ -x "$(command -v vnstat)" ]; then
-  echo 'Error: vnstat is not installed.' >&2
-  exit 1
-fi
-
         echo "press ctrl c to terminate the execution"
 
 	 #commands 2>&1 1> $FILE/$2
@@ -51,11 +50,6 @@ fi
 
 	;;
 	s)
-	if ! [ -x "$(command -v bmon)" ]; then
-  	 echo 'Error: bmon is not installed.' >&2
-         exit 1
- 	fi
-
 	 commands
 	;;
 	*)
