@@ -21,7 +21,7 @@ function commands(){
 	#c2=$(df -h --output=size --total | awk 'END {print "total space:" $4}')
        	c2=$(df -h / | awk 'END {print "available space:" $4}') 
         #uptime
-	c3=$(uptime |awk '{print "15m load avarage:"$10}')
+	c3=$(uptime |awk '{print "15m load avarage:"$13}')
 	
 	#c4=$(ps -aux |grep "defunct" |wc -l)
 	c4=$(ps -aux|grep -v grep|grep "defunct"|wc -l|awk '{print "zombieS:" $1}')
