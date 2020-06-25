@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FILE="/home/"$USER"/Desktop"
+FILE="/home/"$USER""
 function usage()
 {
 	echo "use -f to specify the file. Your path is 'home/user/[yourfile]'"
