@@ -26,9 +26,11 @@ function commands(){
 	#c4=$(ps -aux |grep "defunct" |wc -l)
 	c4=$(ps -aux|grep -v grep|grep "defunct"|wc -l|awk '{print "zombieS:" $1}')
 
+	c5=$(vnstat | grep today | awk '{print "rx:" $2$3 " tx:" $5$6}')
 
-	echo $(date),$c1,$c2,$c3,$c4
-      echo "________-_______________________________________________________________________________________"
+
+	echo $(date),$c1,$c2,$c3,$c4,$c5
+      echo "_________________________________________________________________________________________________________________________"
 
         sleep 10s
         done
@@ -37,8 +39,8 @@ function commands(){
 while getopts f:s param ; do
 case $param in
 	f)
-	if ! [ -x "$(command -v bmon)" ]; then
-  echo 'Error: bmon is not installed.' >&2
+	if ! [ -x "$(command -v vnstat)" ]; then
+  echo 'Error: vnstat is not installed.' >&2
   exit 1
 fi
 
