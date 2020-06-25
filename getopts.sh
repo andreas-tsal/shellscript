@@ -27,8 +27,8 @@ function commands(){
 	c4=$(ps -aux|grep -v grep|grep "defunct"|wc -l|awk '{print "zombieS:" $1}')
 
 	#c5=$(vnstat | grep today | awk '{print "rx:" $2$3 " tx:" $5$6}')
-	c5=$(netstat -i | grep wlp2s0 | awk '{print "wifi RX packets until now:"$3 ",wifi TX packets until now:" $7}')
-
+	#c5=$(netstat -i | grep wlp2s0 | awk '{print "wifi RX packets until now:"$3 ",wifi TX packets until now:" $7}')
+	c5=$(netstat -i | sed 1,2d | awk '{SUM+=$3;SUM1+=$7}END{print "RX packets until now:"SUM",TX packets until now:"SUM1}')
 	echo $(date +"%b %d %H:%M:%S"): $c1,$c2,$c3,$c4,$c5
 
         sleep 10s
